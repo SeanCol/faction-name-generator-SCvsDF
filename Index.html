@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faction Name Generator</title>
+  <style>
+    body { font-family: sans-serif; padding: 2em; background: #f9f9f9; }
+    select, input, button { padding: 0.5em; margin: 0.5em 0; }
+    #output { margin-top: 1em; background: #fff; padding: 1em; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>Faction Name Generator</h1>
+  <label for="category">Choose a category:</label>
+  <select id="category">
+    <option value="character">Character</option>
+    <option value="place">Place</option>
+    <option value="title">Title</option>
+  </select>
+  <br>
+  <label for="faction">Choose a faction:</label>
+  <select id="faction">
+    <option value="barbarian">Barbarian (Spite Crowned)</option>
+    <option value="divine">Divine (Monotheists)</option>
+  </select>
+  <br>
+  <label for="count">How many names?</label>
+  <input type="number" id="count" value="10" min="1" max="50">
+  <br>
+  <button onclick="generateNames()">Generate</button>
+
+  <div id="output"></div>
+
+  <script>
+    const barbarianPrefixes = ["Skal", "Dro", "Ulf", "Korr", "Thra", "Gron", "Vark", "Threg", "Drak", "Morn"];
+    const barbarianSuffixes = ["garr", "drik", "ulf", "vek", "orn", "grim", "rak", "thane", "marr", "skorn"];
+    const divinePrefixes = ["Ser", "Al", "Vire", "Dom", "Cal", "Isar", "Tem", "Sol", "Dur", "Lor"];
+    const divineSuffixes = ["ion", "em", "ariel", "orim", "eth", "as", "mir", "en", "oth", "el"];
+
+    const barbarianPlaces = ["Fell", "Crag", "Hold", "Hollow", "Fjord", "Grend", "Thane", "Ridge", "Mire", "Vold"];
+    const divinePlaces = ["oria", "dom", "mir", "el", "teth", "en", "lor", "is", "eth", "aria"];
+
+    const barbarianTitles = [
+      // Healing
+      "the Bone-Stitcher", "Wound-Sealer", "Blood-Singer", "Pain-Eater", "the Rootburn",
+      // Leadership
+      "Chieftain of Flame", "War-Crowned", "Ironhowl", "the Clanfather", "Banner-Caller",
+      // Religion
+      "of the Old Ways", "the Totem-Bearer", "Rite-Speaker", "Ancestor's Voice", "of the Wild Prayer",
+      // Military
+      "Skullsplitter", "of the North", "Wyrm-Slayer", "Bloodhowler", "Stormbrand"
+    ];
+
+    const divineTitles = [
+      // Healing
+      "Mercyhand", "Saint of Balm", "Light-Tender", "Healer of the Flame", "Wound-Keeper",
+      // Leadership
+      "The Flamebearer", "Hand of Law", "The Ascendant", "Voice of Order", "Sovereign of One",
+      // Religion
+      "the Lightbound", "of the Flame", "Anointed Herald", "Divine Witness", "Judicator",
+      // Military
+      "of the Blade Choir", "Oathblade", "Burning Vow", "Shield of Faith", "Hammer of Purity"
+    ];
+
+    function getRandomElement(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function generateNames() {
+      const faction = document.getElementById("faction").value;
+      const category = document.getElementById("category").value;
+      const count = parseInt(document.getElementById("count").value);
+      let names = [];
+
+      for (let i = 0; i < count; i++) {
+        let name = "";
+        if (category === "character") {
+          if (faction === "barbarian") {
+            name = getRandomElement(barbarianPrefixes) + getRandomElement(barbarianSuffixes);
+          } else {
+            name = getRandomElement(divinePrefixes) + getRandomElement(divineSuffixes);
+          }
+        } else if (category === "place") {
+          if (faction === "barbarian") {
+            name = getRandomElement(barbarianPrefixes) + getRandomElement(barbarianPlaces);
+          } else {
+            name = getRandomElement(divinePrefixes) + getRandomElement(divinePlaces);
+          }
+        } else if (category === "title") {
+          if (faction === "barbarian") {
+            name = getRandomElement(barbarianPrefixes) + getRandomElement(barbarianSuffixes) + " " + getRandomElement(barbarianTitles);
+          } else {
+            name = getRandomElement(divinePrefixes) + getRandomElement(divineSuffixes) + " " + getRandomElement(divineTitles);
+          }
+        }
+        names.push(name);
+      }
+
+      document.getElementById("output").innerHTML =
+        `<strong>Generated ${category.charAt(0).toUpperCase() + category.slice(1)} Names (${faction}):</strong><ul>` +
+        names.map(n => `<li>${n}</li>`).join("") +
+        "</ul>";
+    }
+  </script>
+</body>
+</html>
